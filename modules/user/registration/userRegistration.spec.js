@@ -114,17 +114,37 @@ describe('USER REGISTRATION', () => {
   it('should verify from server POST', async () => {
     const response = await axios
       .post('https://server-stage.pasv.us/user/login', {
-        'email':'adnin@pasv.com',
-        'password': 'admin'
+        'email':'admin@pasv.com',
+        'password': 'admin',
       })
       .then(res => res)
       .catch(err => {
         console.log('ERROR', err)
       });
-
-    console.log(response);
+    console.log(response.data);
+    process.env.ADMIN_TOKEN = response.data.token;
 
     expect((response.status)).eq(200);
+  });
+
+  it('should token is not empty', () => {
+    expect(process.env.ADMIN_TOKEN).is.not.empty;
+  });
+
+  it('should verify user by email', async () => {
+    const email = 'admin@pasv.com';
+    const response = await axios({
+      method: 'get',
+      url: `https://server-stage.pasv.us/user/email/${email}`,
+      headers: {
+        Authorization: process.env.ADMIN_TOKEN
+      }
+    })
+      .then(r => r)
+      .catch(e => e)
+
+    expect(response.status).eq(200);
+    expect(response.data.payload.name).eq('Admin PASV')
   });
 
 });
