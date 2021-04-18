@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "chai": "^4.2.0"
+    "chai": "^4.3.0"
   },
   "directories": {
     "doc": "docs"
